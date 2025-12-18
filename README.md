@@ -1,1 +1,88 @@
 # 2led-control
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kontrol 2 LED IoT</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      background-color: #f5f5f5;
+    }
+    h1 { margin-bottom: 10px; }
+    .card {
+      display: inline-block;
+      background: #fff;
+      padding: 18px 22px;
+      margin: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      min-width: 260px;
+    }
+    .title {
+      font-size: 22px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 20px;
+      margin: 6px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      color: white;
+      min-width: 110px;
+    }
+    .on  { background-color: #28a745; }
+    .off { background-color: #dc3545; }
+    #status {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Kontrol 2 LED IoT (ThingSpeak)</h1>
+  <div class="note">Klik tombol maksimal 1x tiap ±15 detik (batas ThingSpeak)</div>
+
+  <div class="card">
+    <div class="title">LED 1 (Field 1)</div>
+    <button class="on"  onclick="kirim(1, 1)">ON</button>
+    <button class="off" onclick="kirim(1, 0)">OFF</button>
+  </div>
+
+  <div class="card">
+    <div class="title">LED 2 (Field 2)</div>
+    <button class="on"  onclick="kirim(2, 1)">ON</button>
+    <button class="off" onclick="kirim(2, 0)">OFF</button>
+  </div>
+
+  <div id="status">Status: Menunggu perintah</div>
+
+  <script>
+    const API_KEY = "ARBM7ZY9GDPQ8Y89"; // ← GANTI dengan Write API Key ThingSpeak
+
+    // field = 1 untuk LED1, field = 2 untuk LED2
+    function kirim(field, nilai) {
+      // Kirim request TANPA pindah halaman (anti CORS)
+      const img = new Image();
+      img.src = `https://api.thingspeak.com/update?api_key=${API_KEY}&field${field}=${nilai}&t=${Date.now()}`;
+
+      document.getElementById("status").innerHTML =
+        `Status: Perintah dikirim → LED ${field} ${(nilai === 1) ? "ON" : "OFF"}`;
+    }
+  </script>
+</body>
+</html>
